@@ -157,6 +157,10 @@ const uploadSchema = new mongoose.Schema({
         // required: true
         default: null,
     },
+    DRAWBACK:{
+        type: String,
+        default: null,
+    },
     MONTH: {
         type: String,
         default: null,
