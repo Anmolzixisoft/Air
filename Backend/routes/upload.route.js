@@ -1,6 +1,9 @@
 var express = require('express')
 const uploadroute = express.Router();
-const { upload } = require('../controllers/upload.controller')
-uploadroute.post('/upload', upload)
+const { upload ,getdata} = require('../controllers/upload.controller.js')
+const { singleUpload } = require('../middleware/multer')
+uploadroute.post('/upload', singleUpload, upload)
+uploadroute.get('/getdata', getdata)
+
 
 module.exports = uploadroute;
