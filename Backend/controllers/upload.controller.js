@@ -7,7 +7,7 @@ const upload = (req, res) => {
     const excelFiles = req.files.excelFile;
 
     if (!excelFiles || !excelFiles[0]) {
-        return res.status(400).send('No file uploaded.');
+        return res.status(400).send({ message: 'No file uploaded.', status: false });
     }
     const buffer = excelFiles[0].buffer; // Access the buffer directly
     const workbook = xlsx.read(buffer, { type: 'buffer' });
@@ -23,10 +23,11 @@ const upload = (req, res) => {
 
         } catch (error) {
             console.error('Error inserting data:', error);
+            return res.send({ error: error, status: false })
         }
     });
 
-    return res.send({ message: 'Excel data uploaded successfully!' });
+    return res.send({ message: 'Excel data uploaded successfully!', status: true });
 };
 
 
@@ -47,4 +48,4 @@ const getdata = async (req, res) => {
         return res.send({ error: error })
     }
 }
-module.exports = { upload,getdata };
+module.exports = { upload, getdata };

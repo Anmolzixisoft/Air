@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <style>
+    .error-message {
+      color: red;
+    }
+  </style>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--favicon-->
+  <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
+  <!--plugins-->
+  <link href="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.css" rel="stylesheet" />
+  <link href="../assets/plugins/simplebar/css/simplebar.css" rel="stylesheet" />
+  <link href="../assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" />
+  <link href="../assets/plugins/metismenu/css/metisMenu.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+
+  <!-- loader-->
+  <link href="../assets/css/pace.min.css" rel="stylesheet" />
+  <script src="../assets/js/pace.min.js"></script>
+  <!-- Bootstrap CSS -->
+  <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="../assets/css/bootstrap-extended.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="../assets/css/app.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="../assets/css/icons.css" rel="stylesheet" />
+  <!-- Theme Style CSS -->
+  <link rel="stylesheet" href="../assets/css/dark-theme.css" />
+  <link rel="stylesheet" href="../assets/css/semi-dark.css" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/header-colors.css" />
+  <link rel="stylesheet" href="../assets/css/responsive.css" />
+  <title>My-Tech -Admin Panel</title>
+</head>
+
+<body>
+
+  <!--wrapper-->
+  <div class="wrapper">
+    <!--sidebar wrapper -->
+
+    <!--end header -->
+    <!--start page wrapper -->
+    <div class="page-wrapper" style="margin: 10px 10px;">
+      <div class="page-content">
+        <div class="row">
+
+          <div class="col-md-12">
+            <div class="card mt-3">
+              <div class="card-body">
+                <form id="productForm">
+                  <div class="row">
+
+
+
+                    <div class="col-md-6 col-sm-6">
+                      <div class="label-font mb-3">
+                        <label for="excelFile" class="form-label">Upload Exel</label>
+                        <input type="file" class="form-control" id="excelFile" name="excelFile" aria-describedby=""
+                          accept=".xlsx" />
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="col-md-12 my-3">
+                    <div class="d-flex-bulkbtn">
+                      <div>
+                        <button type="submit" id="submitButton" class="addpr-btn" href="#"><i></i>Submit</button>
+                      </div>
+                      <div>
+                        <a class="cancel-btn" href="#!"><i></i>Cancel </a>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay toggle-icon"></div>
+
+  <a href="javaScript:;" class="back-to-top"><i class="bx bxs-up-arrow-alt"></i></a>
+  <footer class="page-footer">
+    <p class="mb-0">Copyright © 2023. All right reserved.</p>
+  </footer>
+  </div>
+
+
+  <script src="../assets/js/bootstrap.bundle.min.js"></script>
+
+  <script src="../assets/js/jquery.min.js"></script>
+  <script src="../assets/plugins/simplebar/js/simplebar.min.js"></script>
+  <script src="../assets/plugins/metismenu/js/metisMenu.min.js"></script>
+  <script src="../assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js"></script>
+  <script src="../assets/plugins/vectormap/jquery-jvectormap-2.0.2.min.js"></script>
+  <script src="../assets/plugins/vectormap/jquery-jvectormap-world-mill-en.js"></script>
+  <script src="../assets/plugins/chartjs/js/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+  <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+
+  <script src="../assets/js/index.js"></script>
+  <script src="../utils.js"></script>
+  <script src="../assets/js/app.js"></script>
+  <script>
+    new PerfectScrollbar(".app-container");
+  </script>
+  <script>
+    function isNumberKey(evt) {
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    }
+    $(document).on('submit', '#productForm', function (e) {
+
+      const fromdata = new FormData(this)
+
+
+      e.preventDefault();
+      $.ajax({
+        url: apiUrl + '/upload',
+        type: "POST",
+        dataType: "JSON",
+        data: fromdata,
+        processData: false,
+        contentType: false,
+        success: function (response, status) {
+          if (response.status != true) {
+            Swal.fire(
+              'error!',
+              `${response.error}`,
+              'error'
+            );
+          } else {
+            Swal.fire(
+              'success!',
+             
+              'success',
+            );
+            setTimeout(() => {
+              window.location.href = "manage-products.html"
+            }, 1000);
+          }
+        },
+        error: function (xhr, desc, err) { }
+      });
+    })
+
+
+  </script>
+</body>
+
+</html>
