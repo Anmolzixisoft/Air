@@ -10,9 +10,11 @@ const upload = (req, res) => {
         return res.status(400).send({ message: 'No file uploaded.', status: false });
     }
     const buffer = excelFiles[0].buffer; // Access the buffer directly
+
     const workbook = xlsx.read(buffer, { type: 'buffer' });
 
     const sheetName = workbook.SheetNames[0];
+
     const sheet = workbook.Sheets[sheetName];
     const excelData = xlsx.utils.sheet_to_json(sheet);
     // Insert each row into MongoDB

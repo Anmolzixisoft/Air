@@ -23,8 +23,12 @@ const multer = require('multer');
 //     storage: storage,
 // });
 const storage = multer.memoryStorage(); // Store files in memory as buffers
-const upload = multer({ storage: storage });
-
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 1024, // 1 GB limit
+    },
+});
 const singleUpload = upload.fields([{ name: 'excelFile' }]);
 // const singleUpload = upload.fields([{ name: 'excelFile' }]);
 
