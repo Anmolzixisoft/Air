@@ -7,6 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <!--favicon-->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.1.1/css/buttons.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
   <link rel="icon" href="../assets/images/favicon-32x32.png" type="image/png" />
   <!--plugins-->
@@ -170,6 +173,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
   <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
 
+  <!-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.1.1/js/dataTables.buttons.min.js"></script> -->
 
   <script src="../assets/js/app.js"></script>
   <script src="../utils.js"></script>
@@ -203,106 +208,61 @@
 
 
 
+   
 
-
-
-    const propertyList = document.getElementById('property-list');
-    let count = 1;
-
-    function fetchData() {
-
-      const api = apiUrl + '/getdata';
-      fetch(api, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then(response => {
-          if (response.ok) {
-            return response.json();
-          } else {
-            throw new Error('Failed to fetch data');
-          }
-        })
-        .then(data => {
-          console.log('Data received:', data.message);
-          data.message.forEach(property => {
-            const newRowData = createPropertyListing(property);
-            $('#property-table').DataTable().row.add(newRowData).draw();
-          });
-        })
-
-
-        .catch(error => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
-    }
-
-    function createPropertyListing(property) {
-
-
-
-      const tableRow = [
-        count,
-
-        property.Shipping_Bill_No,
-        property.Shipping_Bill_Date,
-        property.IEC,
-        property.EXPORTER,
-        property.EXPORTER_ADDRESS_AND_CITY,
-        property.City,
-        property.PIN,
-        property.State,
-        property.CONTACT_NO,
-        property.E_MAIL_ID,
-        property.CONSINEE,
-        property.CONSINEE_ADDRESS,
-        property.PORT_CODE,
-        property.FOREIGN_PORT,
-        property.FOREIGN_COUNTRY,
-        property.HS_CODE,
-        property.CHAPTER,
-        property.PRODUCT_DESCRIPITION,
-        property.QUANTITY,
-        property.UNIT_QUANTITY,
-        property.ITEM_RATE_IN_FC,
-        property.CURRENCY,
-        property.Total_Value_IN_FC,
-        property.Unit_Rate_In_USD_Exchange,
-        property.Exchange_Rate_USD,
-        property.Total_Value_IN_USD_Exchange,
-        property.Unit_Rate_in_INR,
-        property.FOB_In_INR,
-        property.INVOICE_SERIAL_NUMBER,
-        property.INVOICE_NUMBER,
-        property.ITEM_NUMBER,
-        property.MONTH,
-        property.YEAR,
-        property.MODE,
-        property.INDIAN_PORT,
-        property.CUSH,
-      ];
-
-      count++;
-      return tableRow;
-    }
-
-
-
-    // window.onload = fetchData;
-     $(document).ready(function () {
-      // Initialize DataTable with options
+    $(document).ready(function () {
       $('#property-table').DataTable({
-        dom: 'lBfrtip', // 'l' adds the "Show 50 entries" dropdown
-        lengthMenu: [ 10, 25, 50, 100], // Customize the entries dropdown options
+        dom: 'lBfrtip',
+        lengthMenu: [10, 25, 50, 75],
         buttons: [
           'copy', 'csv', 'excel', 'pdf'
         ],
+        serverSide: true, // Enable server-side processing
+        // searching: true,
+        ajax: {
+          url: apiUrl + '/getdata',
+          type: 'GET',
+        },
+        columns: [
+          { data: 'count', title: 'Count' },
+          { data: 'Shipping_Bill_No', title: 'Shipping Bill No' },
+          { data: 'Shipping_Bill_Date', title: 'Shipping Bill Date' },
+          { data: 'IEC', title: 'IEC' },
+          { data: 'EXPORTER', title: 'Exporter' },
+          { data: 'EXPORTER_ADDRESS_AND_CITY', title: 'Exporter Address & City' },
+          { data: 'City', title: 'City' },
+          { data: 'PIN', title: 'PIN' },
+          { data: 'State', title: 'State' },
+          { data: 'CONTACT_NO', title: 'Contact No' },
+          { data: 'E_MAIL_ID', title: 'E-mail ID' },
+          { data: 'CONSINEE', title: 'Consignee' },
+          { data: 'CONSINEE_ADDRESS', title: 'Consignee Address' },
+          { data: 'PORT_CODE', title: 'Port Code' },
+          { data: 'FOREIGN_PORT', title: 'Foreign Port' },
+          { data: 'FOREIGN_COUNTRY', title: 'Foreign Country' },
+          { data: 'HS_CODE', title: 'HS Code' },
+          { data: 'CHAPTER', title: 'Chapter' },
+          { data: 'PRODUCT_DESCRIPITION', title: 'Product Description' },
+          { data: 'QUANTITY', title: 'Quantity' },
+          { data: 'UNIT_QUANTITY', title: 'Unit Quantity' },
+          { data: 'ITEM_RATE_IN_FC', title: 'Item Rate in FC' },
+          { data: 'CURRENCY', title: 'Currency' },
+          { data: 'Total_Value_IN_FC', title: 'Total Value in FC' },
+          { data: 'Unit_Rate_In_USD_Exchange', title: 'Unit Rate in USD (Exchange)' },
+          { data: 'Exchange_Rate_USD', title: 'Exchange Rate (USD)' },
+          { data: 'Total_Value_IN_USD_Exchange', title: 'Total Value in USD (Exchange)' },
+          { data: 'Unit_Rate_in_INR', title: 'Unit Rate in INR' },
+          { data: 'FOB_In_INR', title: 'FOB in INR' },
+          { data: 'INVOICE_SERIAL_NUMBER', title: 'Invoice Serial Number' },
+          { data: 'INVOICE_NUMBER', title: 'Invoice Number' },
+          { data: 'ITEM_NUMBER', title: 'Item Number' },
+          { data: 'MONTH', title: 'Month' },
+          { data: 'YEAR', title: 'Year' },
+          { data: 'MODE', title: 'Mode' },
+          { data: 'INDIAN_PORT', title: 'Indian Port' },
+          { data: 'CUSH', title: 'CUSH' },
+        ],
       });
-
-
-      fetchData(); // Call your existing fetchData function
     });
 
 
